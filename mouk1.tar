@@ -1,0 +1,236 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.6.20
+-- Dumped by pg_dump version 9.6.20
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: copy_products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.copy_products (
+    product_id integer,
+    name character varying(30),
+    unit integer,
+    sold integer,
+    buy_price integer
+);
+
+
+ALTER TABLE public.copy_products OWNER TO postgres;
+
+--
+-- Name: expensive_products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.expensive_products (
+    product_id integer,
+    name character varying(30),
+    unit integer,
+    sold integer,
+    buy_price integer
+);
+
+
+ALTER TABLE public.expensive_products OWNER TO postgres;
+
+--
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    product_id integer NOT NULL,
+    name character varying(30),
+    unit integer,
+    sold integer,
+    buy_price integer
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- Name: sales; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sales (
+    sales_id integer NOT NULL,
+    seller_id integer,
+    product_id integer,
+    sell_price integer,
+    date_of_sold date,
+    name character varying(30)
+);
+
+
+ALTER TABLE public.sales OWNER TO postgres;
+
+--
+-- Name: sellers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sellers (
+    seller_id integer NOT NULL,
+    full_name character varying(60),
+    percent integer,
+    com_reward integer,
+    gender character varying(1)
+);
+
+
+ALTER TABLE public.sellers OWNER TO postgres;
+
+--
+-- Data for Name: copy_products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.copy_products (product_id, name, unit, sold, buy_price) FROM stdin;
+1	toy_cars	100	21	200
+2	phones	50	13	1000
+3	juice	120	45	60
+4	apples	50	15	40
+5	kiwi	25	5	50
+6	tomatoes	60	20	55
+7	chocolate_sticks	200	100	65
+8	umbrellas	50	20	120
+9	pants	44	24	500
+10	t_shirts	60	23	300
+\.
+
+
+--
+-- Data for Name: expensive_products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.expensive_products (product_id, name, unit, sold, buy_price) FROM stdin;
+\.
+
+
+--
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products (product_id, name, unit, sold, buy_price) FROM stdin;
+1	toy_cars	100	21	200
+2	phones	50	13	1000
+3	juice	120	45	60
+4	apples	50	15	40
+5	kiwi	25	5	50
+6	tomatoes	60	20	55
+7	chocolate_sticks	200	100	65
+8	umbrellas	50	20	120
+9	pants	44	24	500
+10	t_shirts	60	23	300
+\.
+
+
+--
+-- Data for Name: sales; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.sales (sales_id, seller_id, product_id, sell_price, date_of_sold, name) FROM stdin;
+1	\N	\N	110	2022-05-25	toy_cars
+2	\N	\N	1100	2022-05-25	phones
+3	\N	\N	65	2022-05-25	juice
+4	\N	\N	50	2022-05-27	apples
+5	\N	\N	46	2022-05-27	kiwi
+6	\N	\N	64	2022-05-27	tomatoes
+7	\N	\N	72	2022-05-28	chocolate_sticks
+8	\N	\N	145	2022-05-28	umbrellas
+9	\N	\N	570	2022-05-30	pants
+10	\N	\N	357	2022-05-30	t-shirts
+\.
+
+
+--
+-- Data for Name: sellers; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.sellers (seller_id, full_name, percent, com_reward, gender) FROM stdin;
+1	IVAN PERESADA	6	\N	M
+2	GRIGORIY LISHNIY	8	\N	M
+3	ALEXANDR GANUSEVICH	9	\N	M
+4	DANILA JDANOV	10	\N	M
+5	IVAN NASIROV	15	\N	M
+6	VLADISLAV IONOV	13	\N	M
+7	ANASTASIA POPOVA	20	\N	F
+8	IGOR MALCEV	17	\N	M
+9	GALINA BOLICHEVA	16	\N	F
+10	DMITRYI KALENKOV	12	\N	M
+\.
+
+
+--
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (product_id);
+
+
+--
+-- Name: sales sales_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sales
+    ADD CONSTRAINT sales_pkey PRIMARY KEY (sales_id);
+
+
+--
+-- Name: sellers sellers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sellers
+    ADD CONSTRAINT sellers_pkey PRIMARY KEY (seller_id);
+
+
+--
+-- Name: sales sales_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sales
+    ADD CONSTRAINT sales_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(product_id);
+
+
+--
+-- Name: sales sales_seller_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sales
+    ADD CONSTRAINT sales_seller_id_fkey FOREIGN KEY (seller_id) REFERENCES public.sellers(seller_id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
